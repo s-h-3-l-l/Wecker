@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Wecker</title>
+        <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+        <script src="/static/js/jquery-3.5.1.slim.min.js"></script>
+        <script src="/static/js/bootstrap.bundle.min.js"></script>
+        <style>
+            .nobreak {
+                overflow-y: hidden;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .number-input {
+                width: 5em;
+            }
+            
+            * {
+                font-size: 32px;
+            }
+            
+            input[type=checkbox], input[type=radio] {
+                transform: scale(2);
+                margin-right: 0.5em;
+            }
+            
+            @media (min-width: 992px) {
+                * {
+                    font-size: 1em;
+                }
+                
+                input[type=checkbox], input[type=radio] {
+                    transform: scale(1);
+                    margin-right: 0.25em;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid">
+            {% if is_ringing %}
+                <div class="row">
+                    <a href="/stop" class="w-100">
+                        <div class="alert alert-warning w-100">
+                            <h5 class="alert-heading">Alarm is ringing!</h5>
+                            <span>Click here to stop</span>
+                        </div>
+                    </a>
+                </div>
+            {% endif %}
+            
+            <div class="row">
+                {% if alarms %}
+                    <div class="col-lg-6 col-12 pt-3">
+                        <div class="card">
+                            <div class="card-header">Set Alarms</div>
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    {% for alarm in alarms %}
+                                        <li class="list-group-item">
+                                            <form method="POST" action="/delete" class="d-flex flex-row justify-content-between align-items-stretch">
+                                                <span class="my-auto pr-2 nobreak">{{alarm["value"]}}</span>
+                                                <input type="hidden" name="id" value="{{alarm['id']}}"/>
+                                                <input type="submit" value="Delete" class="btn btn-danger"/>
+                                            </form>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            
+                <div class="{{'col-lg-6' if alarms else ''}} col-12 pt-3">
+                    <div class="card">
+                        <div class="card-header">Create Alarm</div>
+                        <div class="card-body">
+                            <form method="POST" action="/create" class="pl-lg-4 pl-3">
+                                <div class="row d-flex flex-column mb-3">
+                                    <h5>Weekdays</h5>
+                                    <div>
+                                        <input type="checkbox" name="mo" value="1" id="wd-0" {{ "checked" if weekday == 0 else "" }}/>
+                                        <label for="wd-0">Monday</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="di" value="1" id="wd-1" {{ "checked" if weekday == 1 else "" }}/>
+                                        <label for="wd-1">Tuesday</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="mi" value="1" id="wd-2" {{ "checked" if weekday == 2 else "" }}/>
+                                        <label for="wd-2">Wednesday</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="do" value="1" id="wd-3" {{ "checked" if weekday == 3 else "" }}/>
+                                        <label for="wd-3">Thursday</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="fr" value="1" id="wd-4" {{ "checked" if weekday == 4 else "" }}/>
+                                        <label for="wd-4">Friday</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="sa" value="1" id="wd-5" {{ "checked" if weekday == 5 else "" }}/>
+                                        <label for="wd-5">Saturday</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="so" value="1" id="wd-6" {{ "checked" if weekday == 6 else "" }}/>
+                                        <label for="wd-6">Sunday</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="row d-flex flex-column mb-3">
+                                    <h5>Time</h5>
+                                    <div class="d-flex flex-row align-items-stretch">
+                                        <input class="number-input" type="number" name="hour" min="0" max="23" value="{{hour}}"/>
+                                        <span class="px-1 my-auto font-weight-bold">:</span>
+                                        <input class="number-input" type="number" name="minute" min="0" max="59" value="{{minute}}"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="row d-flex flex-column mb-3">
+                                    <h5>Sound</h5>
+                                    <div>
+                                        <input type="radio" id="sound-{{sounds[0]['id']}}" name="sound" value="{{sounds[0]['value']}}" checked/>
+                                        <label for="sound-{{sounds[0]['id']}}">{{sounds[0]["value"]}}</label>
+                                    </div>
+                                    
+                                    {% for sound in sounds[1:] %}
+                                        <div>
+                                            <input type="radio" id="sound-{{sound['id']}}" name="sound" value="{{sound['value']}}"/>
+                                            <label for="sound-{{sound['id']}}">{{sound["value"]}}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                
+                                <div class="row">
+                                    <input type="submit" value="Create" class="btn btn-success"/>
+                                </div>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

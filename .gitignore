@@ -1,0 +1,4 @@
+alarms.db
+mpv.pid
+bin/youtube-dl
+__pycache__/
