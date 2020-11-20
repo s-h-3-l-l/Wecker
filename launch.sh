@@ -17,4 +17,4 @@ chmod +x bin/youtube-dl
 rm -f mpv.pid;
 
 ./service.py &
-FLASK_APP=server.py python3 -m flask run --host=0.0.0.0 --port=8000 &
+FLASK_APP=server.py python3 -m flask run --host=0.0.0.0 --port=65000 &

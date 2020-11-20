@@ -7,11 +7,12 @@ import json
 import time
 import sqlite3
 import logging
+
 from flask import Flask, request, render_template, redirect
+
 app = Flask(__name__)
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
-
 DB = sqlite3.connect("alarms.db", check_same_thread=False)
 
 @app.route("/")
